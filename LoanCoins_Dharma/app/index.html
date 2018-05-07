@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>LoanCoins Dapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <!-- <link rel="stylesheet" href="./bootstrap.min.css"> -->
+  <link href="./app.css" rel='stylesheet' type='text/html'>
+
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script> var wHTML="index"; </script>
+ <script src="./app.js"></script>
+</head>
+
+<body>
+  <div data-role="page">
+    <h1>Dharma Loan coins Dapp</h1>
+    <h3><b>Signup/Login Page</b></h3>
+  </div>
+  <div class="row">
+    <div class="card-title has-supporting-text">
+      <label>Signup to Loan coins using any one of below options</label><br>
+      <label>Signup </label><select id="signup">
+
+        <option value="debtor">As Debtor</option>
+        <option value="underwriter"> as Underwriter</option>
+        <option value="relayer"> as Relayer</option>
+        <option value="creditor"> as Creditor</option>
+
+      </select><br><br>
+      <input type="email" class="form-control"
+                  id="email" placeholder="Email" /><br>
+
+        <input type="password" class="form-control"
+                id="password" placeholder="password" /><br>
+
+        <button class="btn btn-primary btn-lg"
+              onclick="registerUser();">SignUp User</button><br><br>
+
+      <label>Login to Loan coins using any one of below options</label><br>
+      <label>Login </label><select id="login">
+
+        <option value="debtor"> as Debtor</option>
+        <option value="underwriter"> as Underwriter</option>
+        <option value="relayer"> as Relayer</option>
+        <option value="creditor"> as Creditor</option>
+
+      </select><br><br>
+
+      <input type="email" class="form-control"
+                  id="lemail" placeholder="Email" /><br>
+
+        <input type="password" class="form-control"
+                id="lpassword" placeholder="password" /><br>
+
+        <button class="btn btn-primary btn-lg"
+              onclick="loginUser();">Login User</button>
+
+         </div>
+       </div>
+      
+
+</body>
+</html>

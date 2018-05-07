@@ -1,0 +1,2422 @@
+{
+  "contractName": "PermissionsLib",
+  "abi": [],
+  "bytecode": "0x60606040523415600e57600080fd5b603580601b6000396000f3006060604052600080fd00a165627a7a7230582012db01a38d31146716da6b6c1ca85270b51d4170b76f35c4b2aa77012b57f9d30029",
+  "deployedBytecode": "0x6060604052600080fd00a165627a7a7230582012db01a38d31146716da6b6c1ca85270b51d4170b76f35c4b2aa77012b57f9d30029",
+  "sourceMap": "610:2090:13:-;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "610:2090:13:-;;;;;",
+  "source": "/*\n\n  Copyright 2017 Dharma Labs Inc.\n\n  Licensed under the Apache License, Version 2.0 (the \"License\");\n  you may not use this file except in compliance with the License.\n  You may obtain a copy of the License at\n\n    http://www.apache.org/licenses/LICENSE-2.0\n\n  Unless required by applicable law or agreed to in writing, software\n  distributed under the License is distributed on an \"AS IS\" BASIS,\n  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n  See the License for the specific language governing permissions and\n  limitations under the License.\n\n*/\n\npragma solidity 0.4.18;\n\n\nlibrary PermissionsLib {\n    struct Permissions {\n        mapping (address => bool) authorized;\n        mapping (address => uint) agentToIndex; // ensures O(1) look-up\n        address[] authorizedAgents;\n    }\n\n    function authorize(Permissions storage self, address agent)\n        internal\n    {\n        require(isNotAuthorized(self, agent));\n\n        self.authorized[agent] = true;\n        self.authorizedAgents.push(agent);\n        self.agentToIndex[agent] = self.authorizedAgents.length - 1;\n    }\n\n    function revokeAuthorization(Permissions storage self, address agent)\n        internal\n    {\n        /* We only want to do work in the case where the agent whose\n        authorization is being revoked had authorization permissions in the\n        first place. */\n        require(isAuthorized(self, agent));\n\n        uint indexOfAgentToRevoke = self.agentToIndex[agent];\n        uint indexOfAgentToMove = self.authorizedAgents.length - 1;\n        address agentToMove = self.authorizedAgents[indexOfAgentToMove];\n\n        // Revoke the agent's authorization.\n        delete self.authorized[agent];\n\n        // Remove the agent from our collection of authorized agents.\n        self.authorizedAgents[indexOfAgentToRevoke] = agentToMove;\n\n        // Update our indices to reflect the above changes.\n        self.agentToIndex[agentToMove] = indexOfAgentToRevoke;\n        delete self.agentToIndex[agent];\n\n        // Clean up memory that's no longer being used.\n        delete self.authorizedAgents[indexOfAgentToMove];\n        self.authorizedAgents.length -= 1;\n    }\n\n    function isAuthorized(Permissions storage self, address agent)\n        internal\n        view\n        returns (bool)\n    {\n        return self.authorized[agent];\n    }\n\n    function isNotAuthorized(Permissions storage self, address agent)\n        internal\n        view\n        returns (bool)\n    {\n        return !isAuthorized(self, agent);\n    }\n\n    function getAuthorizedAgents(Permissions storage self)\n        internal\n        view\n        returns (address[])\n    {\n        return self.authorizedAgents;\n    }\n}\n",
+  "sourcePath": "/home/anusha/Dharma/LoanCoins_Dharma/contracts/libraries/PermissionsLib.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/anusha/Dharma/LoanCoins_Dharma/contracts/libraries/PermissionsLib.sol",
+      "exportedSymbols": {
+        "PermissionsLib": [
+          3066
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 2888,
+        "name": "PragmaDirective",
+        "src": "584:23:13"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "library",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            3066
+          ],
+          "name": "PermissionsLib",
+          "scope": 3067
+        },
+        "children": [
+          {
+            "attributes": {
+              "canonicalName": "PermissionsLib.Permissions",
+              "name": "Permissions",
+              "scope": 3066,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "authorized",
+                  "scope": 2900,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "mapping(address => bool)",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "type": "mapping(address => bool)"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2889,
+                        "name": "ElementaryTypeName",
+                        "src": "677:7:13"
+                      },
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 2890,
+                        "name": "ElementaryTypeName",
+                        "src": "688:4:13"
+                      }
+                    ],
+                    "id": 2891,
+                    "name": "Mapping",
+                    "src": "668:25:13"
+                  }
+                ],
+                "id": 2892,
+                "name": "VariableDeclaration",
+                "src": "668:36:13"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "agentToIndex",
+                  "scope": 2900,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "mapping(address => uint256)",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "type": "mapping(address => uint256)"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2893,
+                        "name": "ElementaryTypeName",
+                        "src": "723:7:13"
+                      },
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2894,
+                        "name": "ElementaryTypeName",
+                        "src": "734:4:13"
+                      }
+                    ],
+                    "id": 2895,
+                    "name": "Mapping",
+                    "src": "714:25:13"
+                  }
+                ],
+                "id": 2896,
+                "name": "VariableDeclaration",
+                "src": "714:38:13"
+              },
+              {
+                "attributes": {
+                  "constant": false,
+                  "name": "authorizedAgents",
+                  "scope": 2900,
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "type": "address[] storage pointer",
+                  "value": null,
+                  "visibility": "internal"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "length": null,
+                      "type": "address[] storage pointer"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2897,
+                        "name": "ElementaryTypeName",
+                        "src": "786:7:13"
+                      }
+                    ],
+                    "id": 2898,
+                    "name": "ArrayTypeName",
+                    "src": "786:9:13"
+                  }
+                ],
+                "id": 2899,
+                "name": "VariableDeclaration",
+                "src": "786:26:13"
+              }
+            ],
+            "id": 2900,
+            "name": "StructDefinition",
+            "src": "639:180:13"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "authorize",
+              "payable": false,
+              "scope": 3066,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "self",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "type": "struct PermissionsLib.Permissions storage pointer",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Permissions",
+                          "referencedDeclaration": 2900,
+                          "type": "struct PermissionsLib.Permissions storage pointer"
+                        },
+                        "id": 2901,
+                        "name": "UserDefinedTypeName",
+                        "src": "844:11:13"
+                      }
+                    ],
+                    "id": 2902,
+                    "name": "VariableDeclaration",
+                    "src": "844:24:13"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "agent",
+                      "scope": 2943,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2903,
+                        "name": "ElementaryTypeName",
+                        "src": "870:7:13"
+                      }
+                    ],
+                    "id": 2904,
+                    "name": "VariableDeclaration",
+                    "src": "870:13:13"
+                  }
+                ],
+                "id": 2905,
+                "name": "ParameterList",
+                "src": "843:41:13"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2906,
+                "name": "ParameterList",
+                "src": "906:0:13"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_bool",
+                                  "typeString": "bool"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 6241,
+                              "type": "function (bool) pure",
+                              "value": "require"
+                            },
+                            "id": 2907,
+                            "name": "Identifier",
+                            "src": "916:7:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bool",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_struct$_Permissions_$2900_storage_ptr",
+                                      "typeString": "struct PermissionsLib.Permissions storage pointer"
+                                    },
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3053,
+                                  "type": "function (struct PermissionsLib.Permissions storage pointer,address) view returns (bool)",
+                                  "value": "isNotAuthorized"
+                                },
+                                "id": 2908,
+                                "name": "Identifier",
+                                "src": "924:15:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2902,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 2909,
+                                "name": "Identifier",
+                                "src": "940:4:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2904,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 2910,
+                                "name": "Identifier",
+                                "src": "946:5:13"
+                              }
+                            ],
+                            "id": 2911,
+                            "name": "FunctionCall",
+                            "src": "924:28:13"
+                          }
+                        ],
+                        "id": 2912,
+                        "name": "FunctionCall",
+                        "src": "916:37:13"
+                      }
+                    ],
+                    "id": 2913,
+                    "name": "ExpressionStatement",
+                    "src": "916:37:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "bool"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorized",
+                                  "referencedDeclaration": 2892,
+                                  "type": "mapping(address => bool)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2902,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2914,
+                                    "name": "Identifier",
+                                    "src": "964:4:13"
+                                  }
+                                ],
+                                "id": 2917,
+                                "name": "MemberAccess",
+                                "src": "964:15:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2904,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 2916,
+                                "name": "Identifier",
+                                "src": "980:5:13"
+                              }
+                            ],
+                            "id": 2918,
+                            "name": "IndexAccess",
+                            "src": "964:22:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "74727565",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "bool",
+                              "type": "bool",
+                              "value": "true"
+                            },
+                            "id": 2919,
+                            "name": "Literal",
+                            "src": "989:4:13"
+                          }
+                        ],
+                        "id": 2920,
+                        "name": "Assignment",
+                        "src": "964:29:13"
+                      }
+                    ],
+                    "id": 2921,
+                    "name": "ExpressionStatement",
+                    "src": "964:29:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "uint256",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_address",
+                                  "typeString": "address"
+                                }
+                              ],
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "push",
+                              "referencedDeclaration": null,
+                              "type": "function (address) returns (uint256)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorizedAgents",
+                                  "referencedDeclaration": 2899,
+                                  "type": "address[] storage ref"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2902,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2922,
+                                    "name": "Identifier",
+                                    "src": "1003:4:13"
+                                  }
+                                ],
+                                "id": 2925,
+                                "name": "MemberAccess",
+                                "src": "1003:21:13"
+                              }
+                            ],
+                            "id": 2926,
+                            "name": "MemberAccess",
+                            "src": "1003:26:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2904,
+                              "type": "address",
+                              "value": "agent"
+                            },
+                            "id": 2927,
+                            "name": "Identifier",
+                            "src": "1030:5:13"
+                          }
+                        ],
+                        "id": 2928,
+                        "name": "FunctionCall",
+                        "src": "1003:33:13"
+                      }
+                    ],
+                    "id": 2929,
+                    "name": "ExpressionStatement",
+                    "src": "1003:33:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "agentToIndex",
+                                  "referencedDeclaration": 2896,
+                                  "type": "mapping(address => uint256)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2902,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2930,
+                                    "name": "Identifier",
+                                    "src": "1046:4:13"
+                                  }
+                                ],
+                                "id": 2933,
+                                "name": "MemberAccess",
+                                "src": "1046:17:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2904,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 2932,
+                                "name": "Identifier",
+                                "src": "1064:5:13"
+                              }
+                            ],
+                            "id": 2934,
+                            "name": "IndexAccess",
+                            "src": "1046:24:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "commonType": {
+                                "typeIdentifier": "t_uint256",
+                                "typeString": "uint256"
+                              },
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "operator": "-",
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "length",
+                                  "referencedDeclaration": null,
+                                  "type": "uint256"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "isConstant": false,
+                                      "isLValue": true,
+                                      "isPure": false,
+                                      "lValueRequested": false,
+                                      "member_name": "authorizedAgents",
+                                      "referencedDeclaration": 2899,
+                                      "type": "address[] storage ref"
+                                    },
+                                    "children": [
+                                      {
+                                        "attributes": {
+                                          "argumentTypes": null,
+                                          "overloadedDeclarations": [
+                                            null
+                                          ],
+                                          "referencedDeclaration": 2902,
+                                          "type": "struct PermissionsLib.Permissions storage pointer",
+                                          "value": "self"
+                                        },
+                                        "id": 2935,
+                                        "name": "Identifier",
+                                        "src": "1073:4:13"
+                                      }
+                                    ],
+                                    "id": 2936,
+                                    "name": "MemberAccess",
+                                    "src": "1073:21:13"
+                                  }
+                                ],
+                                "id": 2937,
+                                "name": "MemberAccess",
+                                "src": "1073:28:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "31",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "number",
+                                  "type": "int_const 1",
+                                  "value": "1"
+                                },
+                                "id": 2938,
+                                "name": "Literal",
+                                "src": "1104:1:13"
+                              }
+                            ],
+                            "id": 2939,
+                            "name": "BinaryOperation",
+                            "src": "1073:32:13"
+                          }
+                        ],
+                        "id": 2940,
+                        "name": "Assignment",
+                        "src": "1046:59:13"
+                      }
+                    ],
+                    "id": 2941,
+                    "name": "ExpressionStatement",
+                    "src": "1046:59:13"
+                  }
+                ],
+                "id": 2942,
+                "name": "Block",
+                "src": "906:206:13"
+              }
+            ],
+            "id": 2943,
+            "name": "FunctionDefinition",
+            "src": "825:287:13"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "revokeAuthorization",
+              "payable": false,
+              "scope": 3066,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "self",
+                      "scope": 3022,
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "type": "struct PermissionsLib.Permissions storage pointer",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Permissions",
+                          "referencedDeclaration": 2900,
+                          "type": "struct PermissionsLib.Permissions storage pointer"
+                        },
+                        "id": 2944,
+                        "name": "UserDefinedTypeName",
+                        "src": "1147:11:13"
+                      }
+                    ],
+                    "id": 2945,
+                    "name": "VariableDeclaration",
+                    "src": "1147:24:13"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "agent",
+                      "scope": 3022,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2946,
+                        "name": "ElementaryTypeName",
+                        "src": "1173:7:13"
+                      }
+                    ],
+                    "id": 2947,
+                    "name": "VariableDeclaration",
+                    "src": "1173:13:13"
+                  }
+                ],
+                "id": 2948,
+                "name": "ParameterList",
+                "src": "1146:41:13"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2949,
+                "name": "ParameterList",
+                "src": "1209:0:13"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "isStructConstructorCall": false,
+                          "lValueRequested": false,
+                          "names": [
+                            null
+                          ],
+                          "type": "tuple()",
+                          "type_conversion": false
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": [
+                                {
+                                  "typeIdentifier": "t_bool",
+                                  "typeString": "bool"
+                                }
+                              ],
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 6241,
+                              "type": "function (bool) pure",
+                              "value": "require"
+                            },
+                            "id": 2950,
+                            "name": "Identifier",
+                            "src": "1388:7:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bool",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_struct$_Permissions_$2900_storage_ptr",
+                                      "typeString": "struct PermissionsLib.Permissions storage pointer"
+                                    },
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3037,
+                                  "type": "function (struct PermissionsLib.Permissions storage pointer,address) view returns (bool)",
+                                  "value": "isAuthorized"
+                                },
+                                "id": 2951,
+                                "name": "Identifier",
+                                "src": "1396:12:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2945,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 2952,
+                                "name": "Identifier",
+                                "src": "1409:4:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2947,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 2953,
+                                "name": "Identifier",
+                                "src": "1415:5:13"
+                              }
+                            ],
+                            "id": 2954,
+                            "name": "FunctionCall",
+                            "src": "1396:25:13"
+                          }
+                        ],
+                        "id": 2955,
+                        "name": "FunctionCall",
+                        "src": "1388:34:13"
+                      }
+                    ],
+                    "id": 2956,
+                    "name": "ExpressionStatement",
+                    "src": "1388:34:13"
+                  },
+                  {
+                    "attributes": {
+                      "assignments": [
+                        2958
+                      ]
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "constant": false,
+                          "name": "indexOfAgentToRevoke",
+                          "scope": 3022,
+                          "stateVariable": false,
+                          "storageLocation": "default",
+                          "type": "uint256",
+                          "value": null,
+                          "visibility": "internal"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2957,
+                            "name": "ElementaryTypeName",
+                            "src": "1433:4:13"
+                          }
+                        ],
+                        "id": 2958,
+                        "name": "VariableDeclaration",
+                        "src": "1433:25:13"
+                      },
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "agentToIndex",
+                              "referencedDeclaration": 2896,
+                              "type": "mapping(address => uint256)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2945,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 2959,
+                                "name": "Identifier",
+                                "src": "1461:4:13"
+                              }
+                            ],
+                            "id": 2960,
+                            "name": "MemberAccess",
+                            "src": "1461:17:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2947,
+                              "type": "address",
+                              "value": "agent"
+                            },
+                            "id": 2961,
+                            "name": "Identifier",
+                            "src": "1479:5:13"
+                          }
+                        ],
+                        "id": 2962,
+                        "name": "IndexAccess",
+                        "src": "1461:24:13"
+                      }
+                    ],
+                    "id": 2963,
+                    "name": "VariableDeclarationStatement",
+                    "src": "1433:52:13"
+                  },
+                  {
+                    "attributes": {
+                      "assignments": [
+                        2965
+                      ]
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "constant": false,
+                          "name": "indexOfAgentToMove",
+                          "scope": 3022,
+                          "stateVariable": false,
+                          "storageLocation": "default",
+                          "type": "uint256",
+                          "value": null,
+                          "visibility": "internal"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "uint",
+                              "type": "uint256"
+                            },
+                            "id": 2964,
+                            "name": "ElementaryTypeName",
+                            "src": "1495:4:13"
+                          }
+                        ],
+                        "id": 2965,
+                        "name": "VariableDeclaration",
+                        "src": "1495:23:13"
+                      },
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "commonType": {
+                            "typeIdentifier": "t_uint256",
+                            "typeString": "uint256"
+                          },
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "-",
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "length",
+                              "referencedDeclaration": null,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorizedAgents",
+                                  "referencedDeclaration": 2899,
+                                  "type": "address[] storage ref"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2966,
+                                    "name": "Identifier",
+                                    "src": "1521:4:13"
+                                  }
+                                ],
+                                "id": 2967,
+                                "name": "MemberAccess",
+                                "src": "1521:21:13"
+                              }
+                            ],
+                            "id": 2968,
+                            "name": "MemberAccess",
+                            "src": "1521:28:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "31",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "number",
+                              "type": "int_const 1",
+                              "value": "1"
+                            },
+                            "id": 2969,
+                            "name": "Literal",
+                            "src": "1552:1:13"
+                          }
+                        ],
+                        "id": 2970,
+                        "name": "BinaryOperation",
+                        "src": "1521:32:13"
+                      }
+                    ],
+                    "id": 2971,
+                    "name": "VariableDeclarationStatement",
+                    "src": "1495:58:13"
+                  },
+                  {
+                    "attributes": {
+                      "assignments": [
+                        2973
+                      ]
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "constant": false,
+                          "name": "agentToMove",
+                          "scope": 3022,
+                          "stateVariable": false,
+                          "storageLocation": "default",
+                          "type": "address",
+                          "value": null,
+                          "visibility": "internal"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "address",
+                              "type": "address"
+                            },
+                            "id": 2972,
+                            "name": "ElementaryTypeName",
+                            "src": "1563:7:13"
+                          }
+                        ],
+                        "id": 2973,
+                        "name": "VariableDeclaration",
+                        "src": "1563:19:13"
+                      },
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "authorizedAgents",
+                              "referencedDeclaration": 2899,
+                              "type": "address[] storage ref"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2945,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 2974,
+                                "name": "Identifier",
+                                "src": "1585:4:13"
+                              }
+                            ],
+                            "id": 2975,
+                            "name": "MemberAccess",
+                            "src": "1585:21:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2965,
+                              "type": "uint256",
+                              "value": "indexOfAgentToMove"
+                            },
+                            "id": 2976,
+                            "name": "Identifier",
+                            "src": "1607:18:13"
+                          }
+                        ],
+                        "id": 2977,
+                        "name": "IndexAccess",
+                        "src": "1585:41:13"
+                      }
+                    ],
+                    "id": 2978,
+                    "name": "VariableDeclarationStatement",
+                    "src": "1563:63:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "delete",
+                          "prefix": true,
+                          "type": "tuple()"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "bool"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorized",
+                                  "referencedDeclaration": 2892,
+                                  "type": "mapping(address => bool)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2979,
+                                    "name": "Identifier",
+                                    "src": "1689:4:13"
+                                  }
+                                ],
+                                "id": 2980,
+                                "name": "MemberAccess",
+                                "src": "1689:15:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2947,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 2981,
+                                "name": "Identifier",
+                                "src": "1705:5:13"
+                              }
+                            ],
+                            "id": 2982,
+                            "name": "IndexAccess",
+                            "src": "1689:22:13"
+                          }
+                        ],
+                        "id": 2983,
+                        "name": "UnaryOperation",
+                        "src": "1682:29:13"
+                      }
+                    ],
+                    "id": 2984,
+                    "name": "ExpressionStatement",
+                    "src": "1682:29:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorizedAgents",
+                                  "referencedDeclaration": 2899,
+                                  "type": "address[] storage ref"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2985,
+                                    "name": "Identifier",
+                                    "src": "1792:4:13"
+                                  }
+                                ],
+                                "id": 2988,
+                                "name": "MemberAccess",
+                                "src": "1792:21:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2958,
+                                  "type": "uint256",
+                                  "value": "indexOfAgentToRevoke"
+                                },
+                                "id": 2987,
+                                "name": "Identifier",
+                                "src": "1814:20:13"
+                              }
+                            ],
+                            "id": 2989,
+                            "name": "IndexAccess",
+                            "src": "1792:43:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2973,
+                              "type": "address",
+                              "value": "agentToMove"
+                            },
+                            "id": 2990,
+                            "name": "Identifier",
+                            "src": "1838:11:13"
+                          }
+                        ],
+                        "id": 2991,
+                        "name": "Assignment",
+                        "src": "1792:57:13"
+                      }
+                    ],
+                    "id": 2992,
+                    "name": "ExpressionStatement",
+                    "src": "1792:57:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "agentToIndex",
+                                  "referencedDeclaration": 2896,
+                                  "type": "mapping(address => uint256)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 2993,
+                                    "name": "Identifier",
+                                    "src": "1920:4:13"
+                                  }
+                                ],
+                                "id": 2996,
+                                "name": "MemberAccess",
+                                "src": "1920:17:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2973,
+                                  "type": "address",
+                                  "value": "agentToMove"
+                                },
+                                "id": 2995,
+                                "name": "Identifier",
+                                "src": "1938:11:13"
+                              }
+                            ],
+                            "id": 2997,
+                            "name": "IndexAccess",
+                            "src": "1920:30:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2958,
+                              "type": "uint256",
+                              "value": "indexOfAgentToRevoke"
+                            },
+                            "id": 2998,
+                            "name": "Identifier",
+                            "src": "1953:20:13"
+                          }
+                        ],
+                        "id": 2999,
+                        "name": "Assignment",
+                        "src": "1920:53:13"
+                      }
+                    ],
+                    "id": 3000,
+                    "name": "ExpressionStatement",
+                    "src": "1920:53:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "delete",
+                          "prefix": true,
+                          "type": "tuple()"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "agentToIndex",
+                                  "referencedDeclaration": 2896,
+                                  "type": "mapping(address => uint256)"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 3001,
+                                    "name": "Identifier",
+                                    "src": "1990:4:13"
+                                  }
+                                ],
+                                "id": 3002,
+                                "name": "MemberAccess",
+                                "src": "1990:17:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2947,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 3003,
+                                "name": "Identifier",
+                                "src": "2008:5:13"
+                              }
+                            ],
+                            "id": 3004,
+                            "name": "IndexAccess",
+                            "src": "1990:24:13"
+                          }
+                        ],
+                        "id": 3005,
+                        "name": "UnaryOperation",
+                        "src": "1983:31:13"
+                      }
+                    ],
+                    "id": 3006,
+                    "name": "ExpressionStatement",
+                    "src": "1983:31:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "delete",
+                          "prefix": true,
+                          "type": "tuple()"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorizedAgents",
+                                  "referencedDeclaration": 2899,
+                                  "type": "address[] storage ref"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 3007,
+                                    "name": "Identifier",
+                                    "src": "2088:4:13"
+                                  }
+                                ],
+                                "id": 3008,
+                                "name": "MemberAccess",
+                                "src": "2088:21:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2965,
+                                  "type": "uint256",
+                                  "value": "indexOfAgentToMove"
+                                },
+                                "id": 3009,
+                                "name": "Identifier",
+                                "src": "2110:18:13"
+                              }
+                            ],
+                            "id": 3010,
+                            "name": "IndexAccess",
+                            "src": "2088:41:13"
+                          }
+                        ],
+                        "id": 3011,
+                        "name": "UnaryOperation",
+                        "src": "2081:48:13"
+                      }
+                    ],
+                    "id": 3012,
+                    "name": "ExpressionStatement",
+                    "src": "2081:48:13"
+                  },
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "-=",
+                          "type": "uint256"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "member_name": "length",
+                              "referencedDeclaration": null,
+                              "type": "uint256"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": true,
+                                  "isPure": false,
+                                  "lValueRequested": false,
+                                  "member_name": "authorizedAgents",
+                                  "referencedDeclaration": 2899,
+                                  "type": "address[] storage ref"
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2945,
+                                      "type": "struct PermissionsLib.Permissions storage pointer",
+                                      "value": "self"
+                                    },
+                                    "id": 3013,
+                                    "name": "Identifier",
+                                    "src": "2139:4:13"
+                                  }
+                                ],
+                                "id": 3016,
+                                "name": "MemberAccess",
+                                "src": "2139:21:13"
+                              }
+                            ],
+                            "id": 3017,
+                            "name": "MemberAccess",
+                            "src": "2139:28:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "hexvalue": "31",
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": true,
+                              "lValueRequested": false,
+                              "subdenomination": null,
+                              "token": "number",
+                              "type": "int_const 1",
+                              "value": "1"
+                            },
+                            "id": 3018,
+                            "name": "Literal",
+                            "src": "2171:1:13"
+                          }
+                        ],
+                        "id": 3019,
+                        "name": "Assignment",
+                        "src": "2139:33:13"
+                      }
+                    ],
+                    "id": 3020,
+                    "name": "ExpressionStatement",
+                    "src": "2139:33:13"
+                  }
+                ],
+                "id": 3021,
+                "name": "Block",
+                "src": "1209:970:13"
+              }
+            ],
+            "id": 3022,
+            "name": "FunctionDefinition",
+            "src": "1118:1061:13"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "isAuthorized",
+              "payable": false,
+              "scope": 3066,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "self",
+                      "scope": 3037,
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "type": "struct PermissionsLib.Permissions storage pointer",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Permissions",
+                          "referencedDeclaration": 2900,
+                          "type": "struct PermissionsLib.Permissions storage pointer"
+                        },
+                        "id": 3023,
+                        "name": "UserDefinedTypeName",
+                        "src": "2207:11:13"
+                      }
+                    ],
+                    "id": 3024,
+                    "name": "VariableDeclaration",
+                    "src": "2207:24:13"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "agent",
+                      "scope": 3037,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 3025,
+                        "name": "ElementaryTypeName",
+                        "src": "2233:7:13"
+                      }
+                    ],
+                    "id": 3026,
+                    "name": "VariableDeclaration",
+                    "src": "2233:13:13"
+                  }
+                ],
+                "id": 3027,
+                "name": "ParameterList",
+                "src": "2206:41:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 3037,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 3028,
+                        "name": "ElementaryTypeName",
+                        "src": "2295:4:13"
+                      }
+                    ],
+                    "id": 3029,
+                    "name": "VariableDeclaration",
+                    "src": "2295:4:13"
+                  }
+                ],
+                "id": 3030,
+                "name": "ParameterList",
+                "src": "2294:6:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 3030
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": false,
+                              "member_name": "authorized",
+                              "referencedDeclaration": 2892,
+                              "type": "mapping(address => bool)"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3024,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 3031,
+                                "name": "Identifier",
+                                "src": "2322:4:13"
+                              }
+                            ],
+                            "id": 3032,
+                            "name": "MemberAccess",
+                            "src": "2322:15:13"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 3026,
+                              "type": "address",
+                              "value": "agent"
+                            },
+                            "id": 3033,
+                            "name": "Identifier",
+                            "src": "2338:5:13"
+                          }
+                        ],
+                        "id": 3034,
+                        "name": "IndexAccess",
+                        "src": "2322:22:13"
+                      }
+                    ],
+                    "id": 3035,
+                    "name": "Return",
+                    "src": "2315:29:13"
+                  }
+                ],
+                "id": 3036,
+                "name": "Block",
+                "src": "2305:46:13"
+              }
+            ],
+            "id": 3037,
+            "name": "FunctionDefinition",
+            "src": "2185:166:13"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "isNotAuthorized",
+              "payable": false,
+              "scope": 3066,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "self",
+                      "scope": 3053,
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "type": "struct PermissionsLib.Permissions storage pointer",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Permissions",
+                          "referencedDeclaration": 2900,
+                          "type": "struct PermissionsLib.Permissions storage pointer"
+                        },
+                        "id": 3038,
+                        "name": "UserDefinedTypeName",
+                        "src": "2382:11:13"
+                      }
+                    ],
+                    "id": 3039,
+                    "name": "VariableDeclaration",
+                    "src": "2382:24:13"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "agent",
+                      "scope": 3053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 3040,
+                        "name": "ElementaryTypeName",
+                        "src": "2408:7:13"
+                      }
+                    ],
+                    "id": 3041,
+                    "name": "VariableDeclaration",
+                    "src": "2408:13:13"
+                  }
+                ],
+                "id": 3042,
+                "name": "ParameterList",
+                "src": "2381:41:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 3053,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "bool",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "bool",
+                          "type": "bool"
+                        },
+                        "id": 3043,
+                        "name": "ElementaryTypeName",
+                        "src": "2470:4:13"
+                      }
+                    ],
+                    "id": 3044,
+                    "name": "VariableDeclaration",
+                    "src": "2470:4:13"
+                  }
+                ],
+                "id": 3045,
+                "name": "ParameterList",
+                "src": "2469:6:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 3045
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "!",
+                          "prefix": true,
+                          "type": "bool"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bool",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_struct$_Permissions_$2900_storage_ptr",
+                                      "typeString": "struct PermissionsLib.Permissions storage pointer"
+                                    },
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3037,
+                                  "type": "function (struct PermissionsLib.Permissions storage pointer,address) view returns (bool)",
+                                  "value": "isAuthorized"
+                                },
+                                "id": 3046,
+                                "name": "Identifier",
+                                "src": "2498:12:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3039,
+                                  "type": "struct PermissionsLib.Permissions storage pointer",
+                                  "value": "self"
+                                },
+                                "id": 3047,
+                                "name": "Identifier",
+                                "src": "2511:4:13"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 3041,
+                                  "type": "address",
+                                  "value": "agent"
+                                },
+                                "id": 3048,
+                                "name": "Identifier",
+                                "src": "2517:5:13"
+                              }
+                            ],
+                            "id": 3049,
+                            "name": "FunctionCall",
+                            "src": "2498:25:13"
+                          }
+                        ],
+                        "id": 3050,
+                        "name": "UnaryOperation",
+                        "src": "2497:26:13"
+                      }
+                    ],
+                    "id": 3051,
+                    "name": "Return",
+                    "src": "2490:33:13"
+                  }
+                ],
+                "id": 3052,
+                "name": "Block",
+                "src": "2480:50:13"
+              }
+            ],
+            "id": 3053,
+            "name": "FunctionDefinition",
+            "src": "2357:173:13"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "getAuthorizedAgents",
+              "payable": false,
+              "scope": 3066,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "internal"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "self",
+                      "scope": 3065,
+                      "stateVariable": false,
+                      "storageLocation": "storage",
+                      "type": "struct PermissionsLib.Permissions storage pointer",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "contractScope": null,
+                          "name": "Permissions",
+                          "referencedDeclaration": 2900,
+                          "type": "struct PermissionsLib.Permissions storage pointer"
+                        },
+                        "id": 3054,
+                        "name": "UserDefinedTypeName",
+                        "src": "2565:11:13"
+                      }
+                    ],
+                    "id": 3055,
+                    "name": "VariableDeclaration",
+                    "src": "2565:24:13"
+                  }
+                ],
+                "id": 3056,
+                "name": "ParameterList",
+                "src": "2564:26:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 3065,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address[] memory",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "length": null,
+                          "type": "address[] storage pointer"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "name": "address",
+                              "type": "address"
+                            },
+                            "id": 3057,
+                            "name": "ElementaryTypeName",
+                            "src": "2638:7:13"
+                          }
+                        ],
+                        "id": 3058,
+                        "name": "ArrayTypeName",
+                        "src": "2638:9:13"
+                      }
+                    ],
+                    "id": 3059,
+                    "name": "VariableDeclaration",
+                    "src": "2638:9:13"
+                  }
+                ],
+                "id": 3060,
+                "name": "ParameterList",
+                "src": "2637:11:13"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 3060
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "member_name": "authorizedAgents",
+                          "referencedDeclaration": 2899,
+                          "type": "address[] storage ref"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 3055,
+                              "type": "struct PermissionsLib.Permissions storage pointer",
+                              "value": "self"
+                            },
+                            "id": 3061,
+                            "name": "Identifier",
+                            "src": "2670:4:13"
+                          }
+                        ],
+                        "id": 3062,
+                        "name": "MemberAccess",
+                        "src": "2670:21:13"
+                      }
+                    ],
+                    "id": 3063,
+                    "name": "Return",
+                    "src": "2663:28:13"
+                  }
+                ],
+                "id": 3064,
+                "name": "Block",
+                "src": "2653:45:13"
+              }
+            ],
+            "id": 3065,
+            "name": "FunctionDefinition",
+            "src": "2536:162:13"
+          }
+        ],
+        "id": 3066,
+        "name": "ContractDefinition",
+        "src": "610:2090:13"
+      }
+    ],
+    "id": 3067,
+    "name": "SourceUnit",
+    "src": "584:2117:13"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x1c13359538bea19df72e425ab39b1f5ee40ab8c3"
+    }
+  },
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-04-14T19:12:16.593Z"
+}

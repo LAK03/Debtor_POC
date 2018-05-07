@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>LoanCoins Dapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <!-- <link rel="stylesheet" href="./bootstrap.min.css"> -->
+  <link href="./app.css" rel='stylesheet' type='text/html'>
+
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+ <script> var wHTML="underwriter"; </script>
+ <script src="../app.js"></script>
+
+</head>
+
+<body>
+  <div data-role="page">
+    <h1>Dharma Loan coins</h1>
+    <h3 style="color:blue;"><b>UnderWriter Dashboard</b></h3>
+  </div>
+  <div style="position: absolute; top: 0; right: 0;"><button class="btn btn-primary btn-lg"
+             onclick="logout();"> LogOut </button></div>
+  <div class="row">
+    <div class="card-title has-supporting-text">
+
+      <label>Email:</label>
+      <text id="useremail"></text></br></br>
+      <label>Account Address:</label>
+      <text id="acctAdd"></text></br></br>
+      <label>Account Balance:</label>
+      <text id="bal"></text></br></br>
+
+    </div>
+  </div>
+
+
+  <div onLoad="buildHtmlTable('#excelDataTable')">
+    <table id="excelDataTable" border="1">
+    </table>
+  </div>
+  <div class="row">
+    <div class="card-title has-supporting-text">
+    <br> <br><input type="text" class="form-control"
+                id="debtorID" placeholder="Enter Debtor ID to review" /></br>
+                <button class="btn btn-primary btn-lg"
+                      onclick="reviewDebtor();">Review & Sign</button>
+              </div>
+  </div>
+
+  <div class="row" style="display:none" id ="revPage">
+        <center>
+          <h4 style="color:blue;">
+            Debtor signed copy</h4>
+        </center>
+
+
+        <p id= "debtorsigned" style="border:ridge;"> </p>
+        <br>
+        <blink> <div style="padding-top: 5px;color:blue;" id="status">&nbsp;</div> </blink>
+        <center>
+          <button class="btn btn-primary btn-lg"
+                onclick="acceptDebtor();">Accept & Sign</button>
+          <button class="btn btn-primary btn-lg"
+                onclick="rejectDebtor();">Reject</button>
+        </center>
+        <br>
+
+      </div>
+      <script>
+       $(document).ready(function() {
+         var useremail = sessionStorage.getItem('useremail');
+          $('#useremail').html(useremail);
+          var acctAdd = sessionStorage.getItem('acctAdd');
+            $('#acctAdd').html(acctAdd);
+          var bal = sessionStorage.getItem('bal');
+             $('#bal').html(bal);
+
+       });
+       </script>
+</body>
+</html>

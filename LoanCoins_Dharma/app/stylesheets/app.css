@@ -1,0 +1,16 @@
+body {
+  margin-left: 25%;
+  margin-right: 25%;
+  margin-top: 10%;
+  font-family: "Open Sans", sans-serif;
+}
+
+p {
+    width: 600px;
+    word-wrap: break-word;
+}
+
+button {
+  font-size: 16px;
+  padding: 5px;
+}

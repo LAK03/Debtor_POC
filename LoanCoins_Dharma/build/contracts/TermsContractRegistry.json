@@ -1,0 +1,620 @@
+{
+  "contractName": "TermsContractRegistry",
+  "abi": [
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "tokenAddress",
+          "type": "address"
+        },
+        {
+          "name": "termsContract",
+          "type": "address"
+        }
+      ],
+      "name": "setSimpleInterestTermsContractAddress",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "tokenAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getSimpleInterestTermsContractAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "bytes32"
+        }
+      ],
+      "name": "symbolToTermsContractAddress",
+      "outputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    }
+  ],
+  "bytecode": "0x6060604052341561000f57600080fd5b6103848061001e6000396000f300606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680631ad43dc01461005c5780636ae369c1146100b45780639ef3daf61461012d575b600080fd5b341561006757600080fd5b6100b2600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610194565b005b34156100bf57600080fd5b6100eb600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610269565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561013857600080fd5b610152600480803560001916906020019091905050610325565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b8060008084604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401807f53696d706c65496e7465726573745465726d73436f6e74726163740000000000815250601b0191505060405180910390206000191660001916815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505050565b600080600083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401807f53696d706c65496e7465726573745465726d73436f6e74726163740000000000815250601b0191505060405180910390206000191660001916815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058206b55207df1db98fa10e468281dd968179a338c52854adc7852dfd80914c8aa070029",
+  "deployedBytecode": "0x606060405260043610610057576000357c0100000000000000000000000000000000000000000000000000000000900463ffffffff1680631ad43dc01461005c5780636ae369c1146100b45780639ef3daf61461012d575b600080fd5b341561006757600080fd5b6100b2600480803573ffffffffffffffffffffffffffffffffffffffff1690602001909190803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610194565b005b34156100bf57600080fd5b6100eb600480803573ffffffffffffffffffffffffffffffffffffffff16906020019091905050610269565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b341561013857600080fd5b610152600480803560001916906020019091905050610325565b604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff16815260200191505060405180910390f35b8060008084604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401807f53696d706c65496e7465726573745465726d73436f6e74726163740000000000815250601b0191505060405180910390206000191660001916815260200190815260200160002060006101000a81548173ffffffffffffffffffffffffffffffffffffffff021916908373ffffffffffffffffffffffffffffffffffffffff1602179055505050565b600080600083604051808273ffffffffffffffffffffffffffffffffffffffff1673ffffffffffffffffffffffffffffffffffffffff166c01000000000000000000000000028152601401807f53696d706c65496e7465726573745465726d73436f6e74726163740000000000815250601b0191505060405180910390206000191660001916815260200190815260200160002060009054906101000a900473ffffffffffffffffffffffffffffffffffffffff169050919050565b60006020528060005260406000206000915054906101000a900473ffffffffffffffffffffffffffffffffffffffff16815600a165627a7a723058206b55207df1db98fa10e468281dd968179a338c52854adc7852dfd80914c8aa070029",
+  "sourceMap": "26:683:12:-;;;;;;;;;;;;;;;;;",
+  "deployedSourceMap": "26:683:12:-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;134:284;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;424:283;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;63:64;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;134:284;398:13;277:28;:118;329:12;306:88;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;277:118;;;;;;;;;;;;;;;;;;:134;;;;;;;;;;;;;;;;;;134:284;;:::o;424:283::-;552:7;582:28;:118;634:12;611:88;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;582:118;;;;;;;;;;;;;;;;;;;;;;;;;;;575:125;;424:283;;;:::o;63:64::-;;;;;;;;;;;;;;;;;;;;;;:::o",
+  "source": "pragma solidity 0.4.18;\n\n\ncontract TermsContractRegistry {\n    mapping (bytes32 => address) public symbolToTermsContractAddress;\n\n    function setSimpleInterestTermsContractAddress(\n        address tokenAddress,\n        address termsContract\n    )\n        public\n    {\n        symbolToTermsContractAddress[keccak256(\n            tokenAddress,\n            \"SimpleInterestTermsContract\"\n        )] = termsContract;\n    }\n\n    function getSimpleInterestTermsContractAddress(\n        address tokenAddress\n    )\n        public\n        view\n        returns (address)\n    {\n        return symbolToTermsContractAddress[keccak256(\n            tokenAddress,\n            \"SimpleInterestTermsContract\"\n        )];\n    }\n}\n",
+  "sourcePath": "/home/anusha/Dharma/LoanCoins_Dharma/contracts/examples/TermsContractRegistry.sol",
+  "ast": {
+    "attributes": {
+      "absolutePath": "/home/anusha/Dharma/LoanCoins_Dharma/contracts/examples/TermsContractRegistry.sol",
+      "exportedSymbols": {
+        "TermsContractRegistry": [
+          2886
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            "0.4",
+            ".18"
+          ]
+        },
+        "id": 2849,
+        "name": "PragmaDirective",
+        "src": "0:23:12"
+      },
+      {
+        "attributes": {
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "contract",
+          "documentation": null,
+          "fullyImplemented": true,
+          "linearizedBaseContracts": [
+            2886
+          ],
+          "name": "TermsContractRegistry",
+          "scope": 2887
+        },
+        "children": [
+          {
+            "attributes": {
+              "constant": false,
+              "name": "symbolToTermsContractAddress",
+              "scope": 2886,
+              "stateVariable": true,
+              "storageLocation": "default",
+              "type": "mapping(bytes32 => address)",
+              "value": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "attributes": {
+                  "type": "mapping(bytes32 => address)"
+                },
+                "children": [
+                  {
+                    "attributes": {
+                      "name": "bytes32",
+                      "type": "bytes32"
+                    },
+                    "id": 2850,
+                    "name": "ElementaryTypeName",
+                    "src": "72:7:12"
+                  },
+                  {
+                    "attributes": {
+                      "name": "address",
+                      "type": "address"
+                    },
+                    "id": 2851,
+                    "name": "ElementaryTypeName",
+                    "src": "83:7:12"
+                  }
+                ],
+                "id": 2852,
+                "name": "Mapping",
+                "src": "63:28:12"
+              }
+            ],
+            "id": 2853,
+            "name": "VariableDeclaration",
+            "src": "63:64:12"
+          },
+          {
+            "attributes": {
+              "constant": false,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "setSimpleInterestTermsContractAddress",
+              "payable": false,
+              "scope": 2886,
+              "stateMutability": "nonpayable",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "tokenAddress",
+                      "scope": 2870,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2854,
+                        "name": "ElementaryTypeName",
+                        "src": "190:7:12"
+                      }
+                    ],
+                    "id": 2855,
+                    "name": "VariableDeclaration",
+                    "src": "190:20:12"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "termsContract",
+                      "scope": 2870,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2856,
+                        "name": "ElementaryTypeName",
+                        "src": "220:7:12"
+                      }
+                    ],
+                    "id": 2857,
+                    "name": "VariableDeclaration",
+                    "src": "220:21:12"
+                  }
+                ],
+                "id": 2858,
+                "name": "ParameterList",
+                "src": "180:67:12"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2859,
+                "name": "ParameterList",
+                "src": "267:0:12"
+              },
+              {
+                "children": [
+                  {
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": false,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "operator": "=",
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": true,
+                              "isPure": false,
+                              "lValueRequested": true,
+                              "type": "address"
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2853,
+                                  "type": "mapping(bytes32 => address)",
+                                  "value": "symbolToTermsContractAddress"
+                                },
+                                "id": 2860,
+                                "name": "Identifier",
+                                "src": "277:28:12"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": false,
+                                  "isStructConstructorCall": false,
+                                  "lValueRequested": false,
+                                  "names": [
+                                    null
+                                  ],
+                                  "type": "bytes32",
+                                  "type_conversion": false
+                                },
+                                "children": [
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": [
+                                        {
+                                          "typeIdentifier": "t_address",
+                                          "typeString": "address"
+                                        },
+                                        {
+                                          "typeIdentifier": "t_stringliteral_8b4cb97860a0dbe2b88011c128ededd7ecf3885dfbcfa754c7192f454c8d53ae",
+                                          "typeString": "literal_string \"SimpleInterestTermsContract\""
+                                        }
+                                      ],
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 6232,
+                                      "type": "function () pure returns (bytes32)",
+                                      "value": "keccak256"
+                                    },
+                                    "id": 2861,
+                                    "name": "Identifier",
+                                    "src": "306:9:12"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "overloadedDeclarations": [
+                                        null
+                                      ],
+                                      "referencedDeclaration": 2855,
+                                      "type": "address",
+                                      "value": "tokenAddress"
+                                    },
+                                    "id": 2862,
+                                    "name": "Identifier",
+                                    "src": "329:12:12"
+                                  },
+                                  {
+                                    "attributes": {
+                                      "argumentTypes": null,
+                                      "hexvalue": "53696d706c65496e7465726573745465726d73436f6e7472616374",
+                                      "isConstant": false,
+                                      "isLValue": false,
+                                      "isPure": true,
+                                      "lValueRequested": false,
+                                      "subdenomination": null,
+                                      "token": "string",
+                                      "type": "literal_string \"SimpleInterestTermsContract\"",
+                                      "value": "SimpleInterestTermsContract"
+                                    },
+                                    "id": 2863,
+                                    "name": "Literal",
+                                    "src": "355:29:12"
+                                  }
+                                ],
+                                "id": 2864,
+                                "name": "FunctionCall",
+                                "src": "306:88:12"
+                              }
+                            ],
+                            "id": 2865,
+                            "name": "IndexAccess",
+                            "src": "277:118:12"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2857,
+                              "type": "address",
+                              "value": "termsContract"
+                            },
+                            "id": 2866,
+                            "name": "Identifier",
+                            "src": "398:13:12"
+                          }
+                        ],
+                        "id": 2867,
+                        "name": "Assignment",
+                        "src": "277:134:12"
+                      }
+                    ],
+                    "id": 2868,
+                    "name": "ExpressionStatement",
+                    "src": "277:134:12"
+                  }
+                ],
+                "id": 2869,
+                "name": "Block",
+                "src": "267:151:12"
+              }
+            ],
+            "id": 2870,
+            "name": "FunctionDefinition",
+            "src": "134:284:12"
+          },
+          {
+            "attributes": {
+              "constant": true,
+              "implemented": true,
+              "isConstructor": false,
+              "modifiers": [
+                null
+              ],
+              "name": "getSimpleInterestTermsContractAddress",
+              "payable": false,
+              "scope": 2886,
+              "stateMutability": "view",
+              "superFunction": null,
+              "visibility": "public"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "tokenAddress",
+                      "scope": 2885,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2871,
+                        "name": "ElementaryTypeName",
+                        "src": "480:7:12"
+                      }
+                    ],
+                    "id": 2872,
+                    "name": "VariableDeclaration",
+                    "src": "480:20:12"
+                  }
+                ],
+                "id": 2873,
+                "name": "ParameterList",
+                "src": "470:36:12"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "name": "",
+                      "scope": 2885,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "type": "address"
+                        },
+                        "id": 2874,
+                        "name": "ElementaryTypeName",
+                        "src": "552:7:12"
+                      }
+                    ],
+                    "id": 2875,
+                    "name": "VariableDeclaration",
+                    "src": "552:7:12"
+                  }
+                ],
+                "id": 2876,
+                "name": "ParameterList",
+                "src": "551:9:12"
+              },
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "functionReturnParameters": 2876
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "argumentTypes": null,
+                          "isConstant": false,
+                          "isLValue": true,
+                          "isPure": false,
+                          "lValueRequested": false,
+                          "type": "address"
+                        },
+                        "children": [
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "overloadedDeclarations": [
+                                null
+                              ],
+                              "referencedDeclaration": 2853,
+                              "type": "mapping(bytes32 => address)",
+                              "value": "symbolToTermsContractAddress"
+                            },
+                            "id": 2877,
+                            "name": "Identifier",
+                            "src": "582:28:12"
+                          },
+                          {
+                            "attributes": {
+                              "argumentTypes": null,
+                              "isConstant": false,
+                              "isLValue": false,
+                              "isPure": false,
+                              "isStructConstructorCall": false,
+                              "lValueRequested": false,
+                              "names": [
+                                null
+                              ],
+                              "type": "bytes32",
+                              "type_conversion": false
+                            },
+                            "children": [
+                              {
+                                "attributes": {
+                                  "argumentTypes": [
+                                    {
+                                      "typeIdentifier": "t_address",
+                                      "typeString": "address"
+                                    },
+                                    {
+                                      "typeIdentifier": "t_stringliteral_8b4cb97860a0dbe2b88011c128ededd7ecf3885dfbcfa754c7192f454c8d53ae",
+                                      "typeString": "literal_string \"SimpleInterestTermsContract\""
+                                    }
+                                  ],
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 6232,
+                                  "type": "function () pure returns (bytes32)",
+                                  "value": "keccak256"
+                                },
+                                "id": 2878,
+                                "name": "Identifier",
+                                "src": "611:9:12"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "overloadedDeclarations": [
+                                    null
+                                  ],
+                                  "referencedDeclaration": 2872,
+                                  "type": "address",
+                                  "value": "tokenAddress"
+                                },
+                                "id": 2879,
+                                "name": "Identifier",
+                                "src": "634:12:12"
+                              },
+                              {
+                                "attributes": {
+                                  "argumentTypes": null,
+                                  "hexvalue": "53696d706c65496e7465726573745465726d73436f6e7472616374",
+                                  "isConstant": false,
+                                  "isLValue": false,
+                                  "isPure": true,
+                                  "lValueRequested": false,
+                                  "subdenomination": null,
+                                  "token": "string",
+                                  "type": "literal_string \"SimpleInterestTermsContract\"",
+                                  "value": "SimpleInterestTermsContract"
+                                },
+                                "id": 2880,
+                                "name": "Literal",
+                                "src": "660:29:12"
+                              }
+                            ],
+                            "id": 2881,
+                            "name": "FunctionCall",
+                            "src": "611:88:12"
+                          }
+                        ],
+                        "id": 2882,
+                        "name": "IndexAccess",
+                        "src": "582:118:12"
+                      }
+                    ],
+                    "id": 2883,
+                    "name": "Return",
+                    "src": "575:125:12"
+                  }
+                ],
+                "id": 2884,
+                "name": "Block",
+                "src": "565:142:12"
+              }
+            ],
+            "id": 2885,
+            "name": "FunctionDefinition",
+            "src": "424:283:12"
+          }
+        ],
+        "id": 2886,
+        "name": "ContractDefinition",
+        "src": "26:683:12"
+      }
+    ],
+    "id": 2887,
+    "name": "SourceUnit",
+    "src": "0:710:12"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.4.18+commit.9cf6e910.Emscripten.clang"
+  },
+  "networks": {
+    "42": {
+      "events": {},
+      "links": {},
+      "address": "0x904c3c32b755481c6ed6358f6d4671411c8f0c69"
+    }
+  },
+  "schemaVersion": "1.0.1",
+  "updatedAt": "2018-04-14T19:13:00.518Z"
+}

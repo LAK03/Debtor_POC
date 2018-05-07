@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>LoanCoins Dapp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+  <!-- <link rel="stylesheet" href="./bootstrap.min.css"> -->
+  <link href="./app.css" rel='stylesheet' type='text/html'>
+
+ <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+ <script src="https://cdn.rawgit.com/ethereum/web3.js/develop/dist/web3.js"></script>
+ <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+ <script> var wHTML="debitor"; </script>
+ <script src="../app.js"></script>
+</head>
+
+<body>
+  <div data-role="page">
+    <h1>Dharma Loan coins</h1>
+    <h3><b>Debtor loan request:</b></h3>
+  </div>
+
+
+<div style="position: absolute; top: 0; right: 0;"><button class="btn btn-primary btn-lg"
+           onclick="logout();"> LogOut </button></div>
+  <div class="row">
+    <div class="card-title has-supporting-text">
+               <label>Email:</label>
+               <text id="useremail"></text></br></br>
+               <label>Underwriter Fee:</label>
+               <text id="uWriterFee"></text></br></br>
+               <label>Relayer Fee:</label>
+               <text id="relayerFee"></text></br></br>
+               <label>Account Address:</label>
+               <text id="acctAdd"></text></br></br>
+               <label>Account Balance:</label>
+               <text id="bal"></text></br></br>
+    <input type="text" class="form-control"
+            id="prin_amt" placeholder="Principal Amount" /><br>
+    <label>Select the amount of tokens you would like to borrow.</label><br>
+    <select id="coinVal">
+      <option value="REP">Augur (REP)</option>
+      <option value="MKR">Maker DAO (MKR)</option>
+      <option value="ZRX">0x Token (ZRX)</option>
+    </select><br>
+    <label>Specify your desired interest rate.</label><br>
+    <input type="text" class="form-control"
+            id="interest_rate" placeholder="Interest Rate" /><br>
+    <label>Specify how often you would like repayments to be due.</label><br>
+    <select id = "paytime">
+        <option value="hours">Hourly</option>
+        <option value="days">Daily</option>
+        <option value="weeks">Weekly</option>
+        <option value="months">Monthly</option>
+        <option value="years">Yearly</option>
+    </select><br>
+      <label>Enter the length of the entire debt agreement, in units of the chosen installments. (e.g. a term length of 2 with an installment type of "monthly" would be equivalent to a 2 month long loan)</label> <br>
+    <input type="text" class="form-control"
+            id="term_len" placeholder="Term Length" /><br>
+
+
+    <button class="btn btn-primary btn-lg"
+          onclick="onGenerateDebtOrder();">Generate Debt Order</button>
+
+    <button class="btn btn-primary btn-lg"
+          onclick="onSignDebtOrder();">Sign Debt Order</button>
+
+          <button class="btn btn-primary btn-lg"
+                onclick="onfilldebt();">Sign & Fill Loan Request</button>
+         </div>
+
+
+              </div>
+
+
+       </div>
+       <!--div data-role="page">
+         <h3 style="color:blue;"><b>DEBTOR Dashboard</b></h3>
+       </div-->
+       <div class="col-md-5">
+
+         <div onLoad="buildHtmlTable('#excelDataTable')">
+           <table id="excelDataTable" border="1">
+           </table>
+         </div>
+       	</div>
+        <script>
+         $(document).ready(function() {
+           var useremail = sessionStorage.getItem('useremail');
+            $('#useremail').html(useremail);
+            var acctAdd = sessionStorage.getItem('acctAdd');
+              $('#acctAdd').html(acctAdd);
+            var bal = sessionStorage.getItem('bal');
+               $('#bal').html(bal);
+         });
+         </script>
+
+</body>
+</html>
